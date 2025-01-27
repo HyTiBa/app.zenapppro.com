@@ -1,7 +1,8 @@
+import TabsComponent from "@/components/CalmTabs";
+import Main from "@/components/Main";
 import { title } from "process";
 import { JSX } from "react";
-import Main from "../components/Main";
-import TabsComponent from "../components/Tabs";
+
 
 export default function Home() {
   return (
