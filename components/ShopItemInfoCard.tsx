@@ -14,11 +14,11 @@ const ShopItemInfoCard = ({ image, title, featureList, price, }: ShopItem) => {
             <div className="mb-4">
                 <img
                     src={`${image}`}
-                    className="mx-auto rounded-lg shadow"
+                    className="mx-auto rounded-lg"
                 />
             </div>
 
-            <h2 className="text-3xl font-bold text-[#5B2C8B] mb-2">
+            <h2 className="text-2xl font-bold text-[#5B2C8B] mb-2">
                 {title}
             </h2>
 
@@ -31,11 +31,7 @@ const ShopItemInfoCard = ({ image, title, featureList, price, }: ShopItem) => {
 
             <p className="text-[#7A5C9C] text-2xl font-bold mb-4">{priceDisplay(price)}</p>
 
-            {/* Add to Cart Button */}
             <AddToCartButton image={image} title={title} featureList={featureList} price={price} />
-            {/* <button className="px-6 py-2 bg-[#5CAE97] text-white text-sm font-bold rounded-full shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300">
-                ADD TO CART
-            </button> */}
         </div>
     )
 }

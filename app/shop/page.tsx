@@ -2,13 +2,16 @@ import Main from '@/components/Main'
 import React from 'react'
 import ShopItemInfoCard, { ShopItem } from '@/components/ShopItemInfoCard'
 import Image from 'next/image'
+import Link from 'next/dist/client/link'
 const ShopPage = () => {
     return (
         <Main>
-            <div>
-                
+            <div className='flex justify-end p-4'>
+                <Link href={'./cart'}>
+                <Image src={'/images/shop/cart.png'} width={30} height={30} alt={''}/>
+                </Link>
             </div>
-            <div className='gap-6 flex flex-col'>
+            <div className='gap-6 mr-4 ml-4 flex flex-col'>
             {ShopItems.map((item, index) => (
                 <ShopItemInfoCard key={index} image={item.image} title={item.title} featureList={item.featureList} price={item.price} ></ShopItemInfoCard>
             ))}
