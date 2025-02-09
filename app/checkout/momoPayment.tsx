@@ -2,7 +2,12 @@
 import { METHODS } from 'http';
 const crypto = require("crypto")
 import React from 'react'
-
+const express = require("express")
+const cors = require("cors")
+const app = express()
+app.use(cors({
+    origin: "*"
+}))
 
 const SECRET_KEY = "dVFdjxj6ytlH7W3bogjNIE5tXThDi0zg"
 const ACCESS_KEY = "QdbeYCfoWF6sDVcS"
@@ -42,8 +47,8 @@ let rawSignature =
     REQUEST_TYPE;
 
 const signature = crypto.createHmac('sha256', SECRET_KEY)
-.update(rawSignature)
-.digest('hex');
+    .update(rawSignature)
+    .digest('hex');
 
 
 
@@ -65,7 +70,7 @@ const REQUEST_BODY = JSON.stringify({
 
 const options = {
     url: "https://test-payment.momo.vn/v2/gateway/api/create",
-    method:"POST",
+    method: "POST",
     headers: {
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(REQUEST_BODY).toString(),
@@ -75,12 +80,17 @@ const options = {
 
 
 
-export async function MomoPayment(){
-   const req = await fetch(options.url, {
+export async function MomoPayment() {
+    const req = await app.fetch(options.url, {
         body: options.data,
         headers: options.headers,
-        method:options.method
+        method: options.method
     })
+    //    const req = await fetch(options.url, {
+    //         body: options.data,
+    //         headers: options.headers,
+    //         method:options.method
+    //     })
     const res = await req.json()
     console.log(res);
 }

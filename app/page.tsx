@@ -3,10 +3,8 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-   <Main>
-    <div></div>
-   </Main>
+    <Main>
+      <div></div>
+    </Main>
   );
 }
-
-

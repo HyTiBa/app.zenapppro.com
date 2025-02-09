@@ -1,21 +1,21 @@
-"use client"
+"use client";
 import { ShopItem } from "@/components/ShopItemInfoCard";
 import React, { Children, createContext } from "react";
 
-export const cart: CartItem[] = []
+export const cart: CartItem[] = [];
 
-export const CartContext = createContext(cart)
+export const CartContext = createContext(cart);
 
 export interface CartItem extends ShopItem {
-    amount: number;
+  amount: number;
 }
 
-export function CartContextProvider({ children }: { children: React.ReactNode }){
-    return (
-        <CartContext.Provider value={cart}>
-            {children}
-        </CartContext.Provider>
-    )
+export function CartContextProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <CartContext.Provider value={cart}>{children}</CartContext.Provider>;
 }
 
-function ad(){}
+function ad() {}

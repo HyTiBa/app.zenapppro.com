@@ -3,10 +3,26 @@ import { METHODS } from 'http';
 import { redirect } from 'next/navigation';
 const crypto = require("crypto")
 
+import Slack from "@slack/bolt"
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+const app = new Slack.App({
+signingSecret:process.env.SLACK_SIGNIN_SECRET,
+token: process.env.SLACK_BOT_TOKEN
+
+})
+
+
 
 
 const page = async ({searchParams}:any) => {
- 
+    await app.client.chat.postMessage({
+        token: process.env.SLACK_BOT_TOKEN,
+        channel: process.env.SLACK_CHANNEL || '',
+        text:"this is a test message"
+    })
 
 const SECRET_KEY = "dVFdjxj6ytlH7W3bogjNIE5tXThDi0zg"
 const ACCESS_KEY = "QdbeYCfoWF6sDVcS"

@@ -6,6 +6,7 @@ import { MomoPayment } from './momoPayment'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Cart } from '@/functions/CartFunctions'
+import { SlackPostMessage } from '@/functions/SlackShopFunctions'
 const CheckoutForm = () => {
   const [paymentType, setPayment] = useState('momo')
   const [delivery, setDelivery] = useState("zalo")
@@ -95,27 +96,7 @@ const CheckoutForm = () => {
         </CardContent>
       </Card>
       <div className='mt-6 flex justify-center'>
-
-        
-
-          
-    <Link href={{
-      pathname: `test`,
-      query: {
-        total: total
-      }
-    }}>
-
-
-
-
-        <button className='px-6 py-2 bg-[#5CAE97] text-white text-lg font-bold rounded-full shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300' onClick={()=>{
-          Cart.setCart([]);
-          
-        }}>
-          Pay Now
-        </button>
-        </Link>
+        <LinkToMomo total={total} />
 
       </div>
     </>
@@ -138,7 +119,8 @@ const LinkToMomo = ({ total }: { total: number }) => {
     }}>
 
       <button className='px-6 py-2 bg-[#5CAE97] text-white text-lg font-bold rounded-full shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300'
-
+        onClick={async () => { Cart.setCart([]) 
+        }}
       >
         Pay Now
       </button>
