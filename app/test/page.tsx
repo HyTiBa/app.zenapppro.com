@@ -1,73 +1,81 @@
-import { Cart } from '@/functions/CartFunctions';
-import { METHODS } from 'http';
-import { redirect } from 'next/navigation';
-const crypto = require("crypto")
+import { Cart } from "@/functions/CartFunctions";
+import { METHODS } from "http";
+import { redirect } from "next/navigation";
+const crypto = require("crypto");
 
-import Slack from "@slack/bolt"
-import dotenv from 'dotenv'
+import Slack from "@slack/bolt";
+import dotenv from "dotenv";
+import { CartItem } from "@/contexts/cartContext";
 
-dotenv.config()
+dotenv.config();
 
 const app = new Slack.App({
-signingSecret:process.env.SLACK_SIGNIN_SECRET,
-token: process.env.SLACK_BOT_TOKEN
+  signingSecret: process.env.SLACK_SIGNIN_SECRET,
+  token: process.env.SLACK_BOT_TOKEN,
+});
 
-})
+const page = async ({ searchParams }: any) => {
+  const now = new Date();
+  const cart = JSON.parse(searchParams.cart) as CartItem[];
+  await app.client.chat.postMessage({
+    token: process.env.SLACK_BOT_TOKEN,
+    channel: process.env.SLACK_CHANNEL || "",
+    text: `
+    --------------
+        ${now.getMonth()}/${now.getDate()} ${now.getHours()}:${now.getMinutes()}
+        Order from ${searchParams.name}
+        Total: VND ${searchParams.total} đ
+        Cart: ${cart.map(
+          (item) => `${item.title}
+       amount: ${item.amount}
+        `
+        )}
+        `,
+  });
 
+  const SECRET_KEY = "dVFdjxj6ytlH7W3bogjNIE5tXThDi0zg";
+  const ACCESS_KEY = "QdbeYCfoWF6sDVcS";
+  const PARTNER_CODE = "MOMO2CZI20210526_TEST";
+  const ORDER_INFO = "Pay with MOMO";
+  const REDIRECT_URL = "zenapppro.com";
+  const IPN_URL = "zenapppro.com";
+  const REQUEST_TYPE = "captureWallet";
+  const AMOUNT = `${searchParams.total}`;
+  const ORDER_ID = `zenshop_${Date.now().toString()}`;
+  const REQUEST_ID = ORDER_ID;
+  const EXTRA_DATA = "";
+  const ORDER_GROUP_ID = "";
+  const AUTO_CAPTURE = true;
+  const LANG = "vi";
 
-
-
-const page = async ({searchParams}:any) => {
-    await app.client.chat.postMessage({
-        token: process.env.SLACK_BOT_TOKEN,
-        channel: process.env.SLACK_CHANNEL || '',
-        text:"this is a test message"
-    })
-
-const SECRET_KEY = "dVFdjxj6ytlH7W3bogjNIE5tXThDi0zg"
-const ACCESS_KEY = "QdbeYCfoWF6sDVcS"
-const PARTNER_CODE = "MOMO2CZI20210526_TEST"
-const ORDER_INFO = "Pay with MOMO"
-const REDIRECT_URL = "zenapppro.com"
-const IPN_URL = "zenapppro.com"
-const REQUEST_TYPE = "captureWallet"
-const AMOUNT = `${searchParams.total}`
-const ORDER_ID = `zenshop_${Date.now().toString()}`
-const REQUEST_ID = ORDER_ID
-const EXTRA_DATA = ""
-const ORDER_GROUP_ID = ""
-const AUTO_CAPTURE = true
-const LANG = "vi"
-
-let rawSignature =
-    'accessKey=' +
+  let rawSignature =
+    "accessKey=" +
     ACCESS_KEY +
-    '&amount=' +
+    "&amount=" +
     AMOUNT +
-    '&extraData=' +
+    "&extraData=" +
     EXTRA_DATA +
-    '&ipnUrl=' +
+    "&ipnUrl=" +
     IPN_URL +
-    '&orderId=' +
+    "&orderId=" +
     ORDER_ID +
-    '&orderInfo=' +
+    "&orderInfo=" +
     ORDER_INFO +
-    '&partnerCode=' +
+    "&partnerCode=" +
     PARTNER_CODE +
-    '&redirectUrl=' +
+    "&redirectUrl=" +
     REDIRECT_URL +
-    '&requestId=' +
+    "&requestId=" +
     REQUEST_ID +
-    '&requestType=' +
+    "&requestType=" +
     REQUEST_TYPE;
 
-const signature = crypto.createHmac('sha256', SECRET_KEY)
-.update(rawSignature)
-.digest('hex');
+  const signature = crypto
+    .createHmac("sha256", SECRET_KEY)
+    .update(rawSignature)
+    .digest("hex");
 
-
-
-const REQUEST_BODY = JSON.stringify({
+  const REQUEST_BODY = JSON.stringify({
     partnerCode: PARTNER_CODE,
     requestType: "captureWallet",
     ipnUrl: IPN_URL,
@@ -78,24 +86,23 @@ const REQUEST_BODY = JSON.stringify({
     requestId: REQUEST_ID,
     extraData: EXTRA_DATA,
     signature: signature,
-    lang: "en"
-})
+    lang: "en",
+  });
 
-
-
-const options = {
+  const options = {
     url: "https://test-payment.momo.vn/v2/gateway/api/create",
-    method:"POST",
+    method: "POST",
     headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(REQUEST_BODY).toString(),
+      "Content-Type": "application/json",
+      "Content-Length": Buffer.byteLength(REQUEST_BODY).toString(),
     },
-    data: REQUEST_BODY
-}
+    data: REQUEST_BODY,
+  };
 
-
-const req = await fetch("https://test-payment.momo.vn/v2/gateway/api/create", {
-    body: JSON.stringify({
+  const req = await fetch(
+    "https://test-payment.momo.vn/v2/gateway/api/create",
+    {
+      body: JSON.stringify({
         partnerCode: PARTNER_CODE,
         requestType: "captureWallet",
         ipnUrl: IPN_URL,
@@ -106,11 +113,12 @@ const req = await fetch("https://test-payment.momo.vn/v2/gateway/api/create", {
         requestId: REQUEST_ID,
         extraData: EXTRA_DATA,
         signature: signature,
-        lang: "en"
-    }),
-    headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(JSON.stringify({
+        lang: "en",
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": Buffer.byteLength(
+          JSON.stringify({
             partnerCode: PARTNER_CODE,
             requestType: "captureWallet",
             ipnUrl: IPN_URL,
@@ -121,21 +129,19 @@ const req = await fetch("https://test-payment.momo.vn/v2/gateway/api/create", {
             requestId: REQUEST_ID,
             extraData: EXTRA_DATA,
             signature: signature,
-            lang: "en"
-        })).toString(),
-    },
-    method:"POST"
-})
-const res = await req.json()
-console.log(res.payUrl);
-console.log(Date.now());
-    redirect(res.payUrl)
-    
-  return (
-    <div>page</div>
-  )
-}
+            lang: "en",
+          })
+        ).toString(),
+      },
+      method: "POST",
+    }
+  );
+  const res = await req.json();
+  console.log(res.payUrl);
+  console.log(Date.now());
+  redirect(res.payUrl);
 
-export default page
+  return <div>page</div>;
+};
 
-
+export default page;
