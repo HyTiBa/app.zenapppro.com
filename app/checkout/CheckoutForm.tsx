@@ -162,7 +162,7 @@ const LinkToMomo = ({ total,name ,cart}: { name:string,total: number,cart:CartIt
   return (
     <Link
       href={{
-        pathname: "/test",
+        pathname: "/momo",
         query: {
           total: total,
           name: name,

@@ -10,7 +10,10 @@ import "./calm.css";
 import { collection, doc, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/firebase";
 export default function Home() {
-  const [userEmail, setUserEmail] = useState(localStorage.getItem("email"));
+  const [userEmail, setUserEmail] = useState(
+    "mail"
+    // localStorage.getItem("email")
+);
   if (userEmail != null) {
     return <Main>{<TabsComponent items={items} />}</Main>;
   }
@@ -35,11 +38,11 @@ export default function Home() {
                 <button
                   onClick={async () => {
                     const calmSpaceRef = collection(db, "spaces");
-                   const q = query(
+                    const q = query(
                       calmSpaceRef,
                       where("email", "==", localStorage.getItem("email"))
                     );
-                    const data = await getDocs(q)
+                    const data = await getDocs(q);
                     // data.docs.length == 0?:
                   }}
                   className="signInBtn"
