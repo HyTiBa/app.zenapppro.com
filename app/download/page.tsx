@@ -2,11 +2,11 @@ import { SlackQRPostMessage } from '@/functions/SlackQRFunction'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
-const page = () => {
+const page = async () => {
     const timeLapse = Date.now()
 
-    // SlackQRPostMessage(Date.now().toString)
-    // redirect("https://qrplanet.com/appstores")
+    await SlackQRPostMessage("this is a test")
+    redirect("https://qrplanet.com/appstores")
     console.log();
     
   return (
