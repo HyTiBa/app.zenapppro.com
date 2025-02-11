@@ -39,7 +39,7 @@ const ShopItemInfoCard = ({ image, title, featureList, price }: ShopItem) => {
 
 export default ShopItemInfoCard;
 
-export function priceDisplay(number: number): string {
+export function priceDisplay(number: number): String {
   const numStr: string = number.toString();
 
   const result: string = numStr
