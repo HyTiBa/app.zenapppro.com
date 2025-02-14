@@ -43,5 +43,5 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  return <AuthContext.Provider value={}>{children}</AuthContext.Provider>;
+  // return <AuthContext.Provider value={}>{children}</AuthContext.Provider>;
 }
