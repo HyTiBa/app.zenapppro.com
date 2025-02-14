@@ -1,20 +1,20 @@
 "use client"
-import { Cart } from '@/functions/CartFunctions';
-import { Button, Card, CardContent, Input } from '@mui/material';
-import React, { useState } from 'react'
-import CheckoutForm from './CheckoutForm';
+// import { Cart } from '@/functions/CartFunctions';
+// import { Button, Card, CardContent, Input } from '@mui/material';
+// import React, { useState } from 'react'
+// import CheckoutForm from './CheckoutForm';
 
 const page = () => {
  
 
 
- const cart = Cart.getCart()
+//  const cart = Cart.getCart()
     
-      const total =   cart.reduce((sum, item) => sum + item.price, 0);
+//       const total =   cart.reduce((sum, item) => sum + item.price, 0);
 
     return (
         <div className="p-4 max-w-lg mx-auto">
-          <Card className="mb-4">
+          {/* <Card className="mb-4">
             <CardContent>
               <div className="text-center mb-4">
                 <h2 className="text-xl font-semibold text-orange-500">Summary</h2>
@@ -34,7 +34,7 @@ const page = () => {
               </div>
             </CardContent>
           </Card>
-    <CheckoutForm/>
+    <CheckoutForm/> */}
         </div>
       );
 }
